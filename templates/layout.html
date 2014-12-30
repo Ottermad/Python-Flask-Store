@@ -1,0 +1,46 @@
+<html>
+<head>
+	<title>{{ page_title }}</title>
+	<link rel="stylesheet" href="css/style.css" type="text/css">
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Oswald:400,700" type="text/css">
+	<link rel="shortcut icon" href="favicon.ico">
+</head>
+<body>
+
+	<div class="header">
+
+		<div class="wrapper">
+
+			<h1 class="branding-title"><a href="./">Shirts 4 Mike</a></h1>
+
+			<ul class="nav">
+				<li class="shirts {% if section == "shirts" %}on{% endif %}"><a href="shirts.php">Shirts</a></li>
+				<li class="contact {% if section == "contact" %}on{% endif %}"><a href="contact.php">Contact</a></li>
+				<li class="cart"><a target="paypal" href="https://www.paypal.com/cgi-bin/webscr?cmd=_cart&amp;business=Q6NFNPFRBWR8S&amp;display=1">Shopping Cart</a></li>
+			</ul>
+
+		</div>
+
+	</div>
+
+	<div id="content">
+	{% block body %}{% endblock %}
+	</div>
+
+	<div class="footer">
+
+		<div class="wrapper">
+
+			<ul>		
+				<li><a href="http://twitter.com/treehouse">Twitter</a></li>
+				<li><a href="https://www.facebook.com/TeamTreehouse">Facebook</a></li>
+			</ul>
+
+			<p>&copy;<?php echo date('Y'); ?> Shirts 4 Mike</p>
+
+		</div>
+	
+	</div>
+
+</body>
+</html>
