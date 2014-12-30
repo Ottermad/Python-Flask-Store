@@ -112,6 +112,7 @@ def index():
         if counter < 5:
             product_data.append(Markup(get_list_view_html(product["id"], product)))
     context["product_data"] = product_data
+    flash('This site is a demo do not buy anything')
     return render_template("index.html", **context)
 
 @app.route("/shirts")
@@ -121,6 +122,7 @@ def shirts():
     for product in products_info:
         product_data.append(Markup(get_list_view_html(product["id"], product)))
     context["product_data"] = product_data
+    flash('This site is a demo do not buy anything')
     return render_template("shirts.html", **context)
 
 @app.route("/shirt/<product_id>")
@@ -131,6 +133,7 @@ def shirt(product_id):
         if product["id"] == product_id:
             my_product = product
     context["product"] = my_product
+    flash('This site is a demo do not buy anything')
     return render_template("shirt.html", **context)
 
 @app.route("/receipt")
