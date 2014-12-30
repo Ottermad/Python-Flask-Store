@@ -1,0 +1,5 @@
+*.pyc
+venv/
+*.DS_Store
+.idea/
+sendgrid.txt
