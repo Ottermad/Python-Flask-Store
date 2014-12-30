@@ -12,6 +12,7 @@ from flask import (
 )
 
 import sendgrid
+from datetime import date
 
 # App setup
 app = Flask(__name__)
@@ -145,7 +146,7 @@ def get_list_view_html(product):
 @app.route("/")
 def index():
     """Function for Shirts4Mike Homepage"""
-    context = {"page_title": "Shirts 4 Mike"}
+    context = {"page_title": "Shirts 4 Mike", "current_year": date.today().year}
     counter = 0
     product_data = []
     for product in products_info:
@@ -162,7 +163,7 @@ def index():
 @app.route("/shirts")
 def shirts():
     """Function for the Shirts Listing Page"""
-    context = {"page_title": "Shirts 4 Mike"}
+    context = {"page_title": "Shirts 4 Mike", "current_year": date.today().year}
     product_data = []
     for product in products_info:
         product_data.append(Markup(get_list_view_html(product)))
@@ -174,7 +175,7 @@ def shirts():
 @app.route("/shirt/<product_id>")
 def shirt(product_id):
     """Function for Individual Shirt Page"""
-    context = {"page_title": "Shirts 4 Mike"}
+    context = {"page_title": "Shirts 4 Mike", "current_year": date.today().year}
     my_product = ""
     for product in products_info:
         if product["id"] == product_id:
@@ -187,14 +188,14 @@ def shirt(product_id):
 @app.route("/receipt")
 def receipt():
     """Function to display receipt after purchase"""
-    context = {"page_title": "Shirts 4 Mike"}
+    context = {"page_title": "Shirts 4 Mike", "current_year": date.today().year}
     return render_template("receipt.html", **context)
 
 
 @app.route("/contact")
 def contact():
     """Function for contact page"""
-    context = {"page_title": "Shirts 4 Mike"}
+    context = {"page_title": "Shirts 4 Mike", "current_year": date.today().year}
     return render_template("contact.html", **context)
 
 
