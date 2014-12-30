@@ -155,7 +155,7 @@ def index():
             product_data.append(
                 Markup(get_list_view_html(product))
             )
-    context["product_data"] = product_data
+    context["product_data"] = Markup("".join(product_data))
     flash("This site is a demo do not buy anything")
     return render_template("index.html", **context)
 
@@ -167,7 +167,7 @@ def shirts():
     product_data = []
     for product in products_info:
         product_data.append(Markup(get_list_view_html(product)))
-    context["product_data"] = product_data
+    context["product_data"] = Markup("".join(product_data))
     flash("This site is a demo do not buy anything")
     return render_template("shirts.html", **context)
 
