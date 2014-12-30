@@ -1,146 +1,162 @@
 from flask import (
-	Flask)
+    Flask,
+    render_template,
+    Markup,
+    url_for,
+    flash,
+    redirect,
+    request
+)
+
 import requests
+import sendgrid
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'some_really_long_random_string_here'
 
 def get_list_view_html(product_id, product):
     
     output = ""
+    image_url = url_for("static", filename= product["img"])
+    shirt_url = url_for("shirt", product_id=product_id)
+    output = output + "<li>"
+    output = output + '<a href="' + shirt_url + '">'
+    output = output + '<img src="' + image_url + '" alt="' + product["name"] + '">'
+    output = output + "<p>View Details</p>"
+    output = output + "</a>"
+    output = output + "</li>"
 
-    output = output + "<li>";
-    output = output + '<a href="shirt.php?id=' + $product_id + '">';
-    output = output + '<img src="' . $product["img"] . '" alt="' . $product["name"] . '">';
-    output = output + "<p>View Details</p>";
-    output = output + "</a>";
-    output = output + "</li>";
+    return output
 
-    return $output;
-}
+products_info = [
+    {
+        "id": "101",
+        "name": "Logo Shirt, Red",
+        "img": "shirt-101.jpg",
+        "price": 18,
+        "paypal": "LNRBY7XSXS5PA",
+        "sizes": ["Small","Medium","Large"]
+    },
 
-$products = array();
-$products[101] = array(
-	"name" => "Logo Shirt, Red",
-	"img" => "img/shirts/shirt-101.jpg",
-	"price" => 18,
-	"paypal" => "9P7DLECFD4LKE",
-    "sizes" => array("Small","Medium","Large","X-Large")
-);
-$products[102] = array(
-	"name" => "Mike the Frog Shirt, Black",
-    "img" => "img/shirts/shirt-102.jpg",
-    "price" => 20,
-    "paypal" => "SXKPTHN2EES3J",
-    "sizes" => array("Small","Medium","Large","X-Large")
-);
-$products[103] = array(
-    "name" => "Mike the Frog Shirt, Blue",
-    "img" => "img/shirts/shirt-103.jpg",    
-    "price" => 20,
-    "paypal" => "7T8LK5WXT5Q9J",
-    "sizes" => array("Small","Medium","Large","X-Large")
-);
-$products[104] = array(
-    "name" => "Logo Shirt, Green",
-    "img" => "img/shirts/shirt-104.jpg",    
-    "price" => 18,
-    "paypal" => "YKVL5F87E8PCS",
-    "sizes" => array("Small","Medium","Large","X-Large")
-);
-$products[105] = array(
-    "name" => "Mike the Frog Shirt, Yellow",
-    "img" => "img/shirts/shirt-105.jpg",    
-    "price" => 25,
-    "paypal" => "4CLP2SCVYM288",
-    "sizes" => array("Small","Medium","Large","X-Large")
-);
-$products[106] = array(
-    "name" => "Logo Shirt, Gray",
-    "img" => "img/shirts/shirt-106.jpg",    
-    "price" => 20,
-    "paypal" => "TNAZ2RGYYJ396",
-    "sizes" => array("Small","Medium","Large","X-Large")
-);
-$products[107] = array(
-    "name" => "Logo Shirt, Teal",
-    "img" => "img/shirts/shirt-107.jpg",    
-    "price" => 20,
-    "paypal" => "S5FMPJN6Y2C32",
-    "sizes" => array("Small","Medium","Large","X-Large")
-);
-$products[108] = array(
-    "name" => "Mike the Frog Shirt, Orange",
-    "img" => "img/shirts/shirt-108.jpg",    
-    "price" => 25,
-    "paypal" => "JMFK7P7VEHS44",
-    "sizes" => array("Large","X-Large")
-);
+    {
+        "id": "102",
+        "name": "Mike the Frog Shirt, Black",
+        "img": "shirt-102.jpg",
+        "price": 20,
+        "paypal": "XP8KRXHEXMQ4J",
+        "sizes": ["Small","Medium","Large"]
+    },
 
-?>
+    {
+        "id": "103",
+        "name": "Mike the Frog Shirt, Blue",
+        "img": "shirt-103.jpg",
+        "price": 20,
+        "paypal": "95C659J3VZGNJ",
+        "sizes": ["Small","Medium","Large"]
+    },
 
+    {
+        "id": "104",
+        "name": "Logo Shirt, Green",
+        "img": "shirt-104.jpg",
+        "price": 18,
+        "paypal": "Z5EY4SJN64SLU",
+        "sizes": ["Small","Medium","Large"]
+    },
 
+    {
+        "id": "105",
+        "name": "Mike the Frog Shirt, Yellow",
+        "img": "shirt-105.jpg",
+        "price": 25,
+        "paypal": "RYAGP5EWG4V4G",
+        "sizes": ["Small","Medium","Large"]
+    },
 
+    {
+        "id": "106",
+        "name": "Logo Shirt, Gray",
+        "img": "shirt-106.jpg",
+        "price": 20,
+        "paypal": "QYHDD4N4SMUKN",
+        "sizes": ["Small","Medium","Large"]
+    },
 
+    {
+        "id": "107",
+        "name": "Logo Shirt, Teal",
+        "img": "shirt-107.jpg",
+        "price": 20,
+        "paypal": "RSDD7RPZFPQTQ",
+        "sizes": ["Small","Medium","Large"]
+    },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    {
+        "id": "108",
+        "name": "Mike the Frog Shirt, Orange",
+        "img": "shirt-108.jpg",
+        "price": 25,
+        "paypal": "LFRHBPYZKHV4Y",
+        "sizes": ["Small","Medium","Large"]
+    }
+]
 
 @app.route("/")
 def index():
-	pass
+    context = {"page_title": "Shirts 4 Mike"}
+    counter = 0
+    product_data = []
+    for product in products_info:
+        counter += 1
+        if counter < 5:
+            product_data.append(Markup(get_list_view_html(product["id"], product)))
+    context["product_data"] = product_data
+    return render_template("index.html", **context)
 
 @app.route("/shirts")
 def shirts():
-	pass
+    context = {"page_title": "Shirts 4 Mike"}
+    product_data = []
+    for product in products_info:
+        product_data.append(Markup(get_list_view_html(product["id"], product)))
+    context["product_data"] = product_data
+    return render_template("shirts.html", **context)
 
-@app.route("/shirt")
-def shirt():
-	pass
+@app.route("/shirt/<product_id>")
+def shirt(product_id):
+    context = {"page_title": "Shirts 4 Mike"}
+    my_product = ""
+    for product in products_info:
+        if product["id"] == product_id:
+            my_product = product
+    context["product"] = my_product
+    return render_template("shirt.html", **context)
 
 @app.route("/receipt")
 def receipt():
-	pass
+    pass
 
 @app.route("/contact")
 def contact():
-	pass
+    context = {"page_title": "Shirts 4 Mike"}
+    return render_template("contact.html", **context)
 
-@app.route("/products")
-def products():
-	pass
+@app.route("/send", methods=['POST'])
+def send():
+    print request.form
+    sendgrid_object = sendgrid.SendGridClient("Ottermad", "OttersR0ck")
+    message = sendgrid.Mail()
+    sender = request.form["email"]
+    subject = request.form["name"]
+    body = request.form["message"]
+    message.add_to("charlie.thomas@attwoodthomas.net")
+    message.set_from(sender)
+    message.set_subject(subject)
+    message.set_html(body)
+    sendgrid_object.send(message)
+    flash('Email sent.')
+    return redirect(url_for('contact'))
 
 if __name__ == "__main__":
-	app.run(debug=True)
+    app.run(debug=True)

@@ -1,9 +1,9 @@
+<!DOCTYPE html>
 <html>
 <head>
 	<title>{{ page_title }}</title>
-	<link rel="stylesheet" href="css/style.css" type="text/css">
+	<link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}" type="text/css">
 	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Oswald:400,700" type="text/css">
-	<link rel="shortcut icon" href="favicon.ico">
 </head>
 <body>
 
@@ -11,11 +11,11 @@
 
 		<div class="wrapper">
 
-			<h1 class="branding-title"><a href="./">Shirts 4 Mike</a></h1>
+			<h1 class="branding-title"><a href="{{ url_for("index") }}">Shirts 4 Mike</a></h1>
 
 			<ul class="nav">
-				<li class="shirts {% if section == "shirts" %}on{% endif %}"><a href="shirts.php">Shirts</a></li>
-				<li class="contact {% if section == "contact" %}on{% endif %}"><a href="contact.php">Contact</a></li>
+				<li class="shirts {% if section == "shirts" %}on{% endif %}"><a href="{{ url_for("shirts") }}">Shirts</a></li>
+				<li class="contact {% if section == "contact" %}on{% endif %}"><a href="{{ url_for("contact") }}">Contact</a></li>
 				<li class="cart"><a target="paypal" href="https://www.paypal.com/cgi-bin/webscr?cmd=_cart&amp;business=Q6NFNPFRBWR8S&amp;display=1">Shopping Cart</a></li>
 			</ul>
 
@@ -41,6 +41,12 @@
 		</div>
 	
 	</div>
+
+	{% for message in get_flashed_messages() %}
+		<script>
+			alert("{{ message }}");
+		</script>
+	{% endfor %}
 
 </body>
 </html>
