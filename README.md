@@ -11,6 +11,6 @@ Features
 * Uses sendgrid API to send emails
 
 
-A live **demo** version can be found here [http://murmuring-escarpment-5572.herokuapp.com/]
+A **demo** version can be found here [http://murmuring-escarpment-5572.herokuapp.com/](http://murmuring-escarpment-5572.herokuapp.com/)
 
 **Do not buy anything on the site**
