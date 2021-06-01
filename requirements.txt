@@ -13,5 +13,5 @@ six==1.8.0
 smtpapi==0.1.2
 unittest2==0.8.0
 unittest2py3k==0.5.1
-urllib3==1.25.3
+urllib3==1.26.5
 Werkzeug==0.15.5
